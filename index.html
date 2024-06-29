@@ -1,0 +1,71 @@
+<div id="daily-time-tracker">
+    <div id="time-display"></div>
+    <div id="token-display"></div>
+    <div id="progress-bar">
+        <div id="progress"></div>
+    </div>
+    <div id="percentage-display"></div>
+</div>
+
+<style>
+#daily-time-tracker {
+    width: 300px;
+    height: 400px;
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+#time-display {
+    text-align: right;
+    font-size: 20px;
+}
+
+#token-display {
+    font-size: 60px;
+    text-align: center;
+    margin-top: 100px;
+}
+
+#progress-bar {
+    width: 200px;
+    height: 30px;
+    background-color: gray;
+    margin: 20px auto;
+}
+
+#progress {
+    height: 100%;
+    background-color: red;
+    width: 0;
+}
+
+#percentage-display {
+    text-align: center;
+    color: red;
+    font-size: 14px;
+}
+</style>
+
+<script>
+function updateDisplay() {
+    const now = new Date();
+    const midnight = new Date(now).setHours(0,0,0,0);
+    const secondsPassed = (now - midnight) / 1000;
+    const secondsInDay = 24 * 60 * 60;
+    
+    const percentageRemaining = (secondsInDay - secondsPassed) / secondsInDay;
+    const tokensRemaining = Math.floor(1440 * percentageRemaining);
+    
+    document.getElementById('time-display').textContent = now.toTimeString().slice(0,5);
+    document.getElementById('token-display').textContent = tokensRemaining;
+    document.getElementById('progress').style.width = `${(1 - percentageRemaining) * 100}%`;
+    document.getElementById('percentage-display').textContent = `${Math.round(percentageRemaining * 100)}%`;
+}
+
+setInterval(updateDisplay, 1000);
+updateDisplay(); // Initial call
+</script>
